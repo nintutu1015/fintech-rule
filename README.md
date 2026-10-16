@@ -2,7 +2,7 @@
 
 把分流当作一个可维护的项目：规则有出处，修改能比较，重要行为有检查，出问题能回退。
 
-当前版本是 **v0.1 本地基础版**。它从已经确认的配置迁移而来，保留现有行为。仓库为公开的 [nintutu1015/fintech-rule](https://github.com/nintutu1015/fintech-rule)，CI 文件已准备但尚未在 GitHub 运行。现用配置不会被工具自动覆盖。
+当前版本是 **v0.1 本地基础版**。它从已经确认的配置迁移而来，保留现有行为。仓库为公开的 [nintutu1015/fintech-rule](https://github.com/nintutu1015/fintech-rule)，GitHub CI（结构检查与回归测试）已通过，但尚未在 Loon 设备上验证。现用配置不会被工具自动覆盖。
 
 ## 现在的分流结构
 

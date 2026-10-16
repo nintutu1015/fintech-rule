@@ -2,7 +2,7 @@
 
 ## 未发布
 
-- 仓库公开范围定为公开；个人站点规则按原样公开，不拆私有叠加层。
+- 仓库公开为 `nintutu1015/fintech-rule` 并完成首次推送，GitHub CI 通过；个人站点规则按原样公开，不拆私有叠加层。
 - 新增 `docs/services.md`：AI、PayPal、Bybit、英国运营商的出口、规则位置和新增 App 流程。
 - `personal.list` 按服务分段加注释，规则行与顺序不变；`verify-baseline` 确认生成配置与冻结旧版一致。
 - 回归预期覆盖全部本地域名规则以及 AI、Bybit 的远程来源；新增本地域名规则未登记预期时 `check` 失败。
