@@ -1,0 +1,51 @@
+{
+  "local_domains": {
+    "bybit.biz": "DE",
+    "byd3c3.com": "DE",
+    "polymarket.com": "TW",
+    "grok.com": "AI",
+    "mosavi.ai": "Proxy"
+  },
+  "final": "Proxy",
+  "remote_policy": {
+    "A_Global": "Proxy",
+    "Paypal": "Paypal",
+    "A_AI.list": "AI",
+    "A_YouTube": "Google"
+  },
+  "remote_before": [
+    [
+      "Paypal",
+      "A_Global"
+    ]
+  ],
+  "group_members_exact": {
+    "Proxy": [
+      "ALL_Filter"
+    ]
+  },
+  "group_members_contain": {
+    "AI": [
+      "Proxy",
+      "Auto",
+      "Fallback",
+      "LOCAL_NODE",
+      "US",
+      "DE",
+      "UK",
+      "KR",
+      "JP",
+      "TW",
+      "HK",
+      "SG"
+    ],
+    "Paypal": [
+      "US",
+      "DE",
+      "UK"
+    ]
+  },
+  "absent_groups": [
+    "漏网之鱼"
+  ]
+}

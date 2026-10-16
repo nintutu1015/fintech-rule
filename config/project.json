@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "name": "loon-rules",
+  "template": "config/profile.template.lcf",
+  "local_rule_files": [
+    "rules/local/personal.list",
+    "rules/local/carriers.list",
+    "rules/local/ai-overrides.list",
+    "rules/local/network.list",
+    "rules/local/final.list"
+  ],
+  "upstreams": "config/upstreams.json",
+  "required_subscriptions": [
+    "MESL"
+  ],
+  "legacy_policy_omissions": [
+    {
+      "id": "carrier-policy-13",
+      "section": "Rule",
+      "line": "IP-CIDR,31.94.0.0/16,no-resolve",
+      "reason": "用户明确选择保留 A 原文；尚未指定出口。"
+    },
+    {
+      "id": "carrier-policy-16",
+      "section": "Rule",
+      "line": "IP-CIDR,87.194.0.0/16,no-resolve",
+      "reason": "用户明确选择保留 A 原文；尚未指定出口。"
+    },
+    {
+      "id": "carrier-policy-17",
+      "section": "Rule",
+      "line": "IP-CIDR,148.252.160.0/19,no-resolve",
+      "reason": "用户明确选择保留 A 原文；尚未指定出口。"
+    }
+  ],
+  "github": {
+    "repository": null,
+    "visibility": null,
+    "ref": "main"
+  }
+}

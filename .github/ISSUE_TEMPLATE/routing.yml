@@ -1,0 +1,33 @@
+name: 分流调整
+description: 记录一个服务或域名的预期出口与实际命中情况
+title: "[分流] "
+body:
+  - type: input
+    id: service
+    attributes:
+      label: 应用或服务
+    validations:
+      required: true
+  - type: textarea
+    id: domains
+    attributes:
+      label: 域名或 IP
+      description: 只填写路由需要的信息；不要粘贴含登录令牌的完整 URL 或账户请求。
+    validations:
+      required: true
+  - type: input
+    id: desired
+    attributes:
+      label: 希望使用的策略组
+      placeholder: AI / Paypal / US / DE / UK / Proxy / DIRECT
+    validations:
+      required: true
+  - type: textarea
+    id: observed
+    attributes:
+      label: Loon 当前命中规则与现象
+      description: 可以贴脱敏后的匹配规则和策略名称。
+  - type: textarea
+    id: verification
+    attributes:
+      label: 如何验证调整成功

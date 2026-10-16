@@ -1,0 +1,12 @@
+/.local/
+/dist/
+/.cache/
+.env
+.env.*
+__pycache__/
+*.py[cod]
+.DS_Store
+*.p12
+*.pfx
+*.pem
+*.key

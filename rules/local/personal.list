@@ -1,0 +1,12 @@
+# 自己的站点与地区例外；每条规则有明确策略。
+DOMAIN-SUFFIX,mosavi.ai,Proxy
+DOMAIN-SUFFIX,bybit.nl,DE
+DOMAIN-SUFFIX,bybit.eu,DE
+DOMAIN-SUFFIX,bybit.biz,DE
+DOMAIN-SUFFIX,bycsi.com,DE
+DOMAIN-SUFFIX,byd3c3.com,DE
+DOMAIN-SUFFIX,bitkeep.com,HK
+DOMAIN-SUFFIX,bonify.de,DE
+DOMAIN-SUFFIX,polymarket.com,TW
+DOMAIN-SUFFIX,cathaypacific.com,Proxy
+DOMAIN-SUFFIX,ant-hkbank-linkd.cn-hongkong.log.aliyuncs.com,HK
