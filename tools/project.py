@@ -236,6 +236,11 @@ def check_expectations(sections, sources, expectations):
         actual = matches[0].split(',')[2].strip() if matches else None
         if actual != expected:
             raise ValueError('Local routing regression for ' + host)
+    covered = {host.lower() for host in expectations['local_domains']}
+    for line in rules:
+        parts = [part.strip() for part in line.split(',')]
+        if parts[0].upper() in {'DOMAIN', 'DOMAIN-SUFFIX'} and parts[1].lower() not in covered:
+            raise ValueError('Local rule without a routing expectation: ' + parts[1])
     if rules[-1] != 'FINAL,' + expectations['final']:
         raise ValueError('FINAL regression')
     for name, expected in expectations['group_members_exact'].items():

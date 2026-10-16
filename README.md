@@ -2,7 +2,7 @@
 
 把分流当作一个可维护的项目：规则有出处，修改能比较，重要行为有检查，出问题能回退。
 
-当前版本是 **v0.1 本地基础版**。它从已经确认的配置迁移而来，保留现有行为。GitHub 仓库地址和公开范围尚未配置，CI 文件已准备但尚未在 GitHub 运行。现用配置不会被工具自动覆盖。
+当前版本是 **v0.1 本地基础版**。它从已经确认的配置迁移而来，保留现有行为。公开范围已定为公开，GitHub 仓库地址尚未配置，CI 文件已准备但尚未在 GitHub 运行。现用配置不会被工具自动覆盖。
 
 ## 现在的分流结构
 
@@ -28,6 +28,7 @@ flowchart LR
 
 | 想修改什么 | 文件 |
 | --- | --- |
+| 每个 App / 网站的现状、新增流程、设备验证记录 | [`docs/services.md`](docs/services.md) |
 | 自己的站点与地区例外 | `rules/local/personal.list` |
 | Wi-Fi Calling 等运营商规则 | `rules/local/carriers.list` |
 | 明确的 AI 例外 | `rules/local/ai-overrides.list` |
@@ -36,7 +37,7 @@ flowchart LR
 | 应用菜单、地区筛选、DNS 等公开配置 | `config/profile.template.lcf` |
 | 第三方规则与插件的 URL、策略、启用状态和顺序 | `config/upstreams.json` |
 | 规则片段的加载顺序、已知遗留问题 | `config/project.json` |
-| 不能改坏的分流预期 | `tests/expectations.json` |
+| 不能改坏的分流预期（每条本地域名规则都必须登记） | `tests/expectations.json` |
 | 自建节点、订阅地址和证书 | `.local/private.json`，仅本地 |
 
 `rules/local/` 是构建片段，包含明确出口策略；当前在构建时写入本地 Rule 段。**不要直接把这些片段当成远程订阅添加**，否则可能改变来源优先级。第三方规则目前继续引用原作者地址，没有整库复制或宣称由本项目维护。

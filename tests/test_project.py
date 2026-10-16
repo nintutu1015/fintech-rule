@@ -56,6 +56,14 @@ class ProjectChecks(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'menu regression'):
             project.check_expectations(project.parse_sections(changed), self.sources, self.expectations)
 
+    def test_new_local_domain_rule_requires_a_routing_expectation(self):
+        changed = self.text.replace('FINAL,Proxy', 'DOMAIN-SUFFIX,example.invalid,Proxy\nFINAL,Proxy')
+        with self.assertRaisesRegex(ValueError, 'without a routing expectation'):
+            project.check_expectations(project.parse_sections(changed), self.sources, self.expectations)
+        covered = copy.deepcopy(self.expectations)
+        covered['local_domains']['example.invalid'] = 'Proxy'
+        project.check_expectations(project.parse_sections(changed), self.sources, covered)
+
     def test_credential_in_public_file_is_rejected_without_echoing_value(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)

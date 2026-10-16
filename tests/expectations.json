@@ -1,16 +1,36 @@
 {
   "local_domains": {
-    "bybit.biz": "DE",
-    "byd3c3.com": "DE",
-    "polymarket.com": "TW",
     "grok.com": "AI",
-    "mosavi.ai": "Proxy"
+    "mosavi.ai": "Proxy",
+    "bybit.nl": "DE",
+    "bybit.eu": "DE",
+    "bybit.biz": "DE",
+    "bycsi.com": "DE",
+    "byd3c3.com": "DE",
+    "bitkeep.com": "HK",
+    "bonify.de": "DE",
+    "polymarket.com": "TW",
+    "cathaypacific.com": "Proxy",
+    "ant-hkbank-linkd.cn-hongkong.log.aliyuncs.com": "HK",
+    "epdg.epc.mnc033.mcc234.pub.3gppnetwork.org": "UK",
+    "epdg.epc.mnc010.mcc234.pub.3gppnetwork.org": "UK",
+    "giffgaff.com": "UK",
+    "em.mesl.cloud": "DIRECT",
+    "meslcloud.com": "Proxy",
+    "githubusercontent.com": "Proxy"
   },
   "final": "Proxy",
   "remote_policy": {
     "A_Global": "Proxy",
     "Paypal": "Paypal",
     "A_AI.list": "AI",
+    "Openai": "AI",
+    "Claude": "AI",
+    "AppleIntelligence": "AI",
+    "Perplexity": "AI",
+    "Cursor": "AI",
+    "Ai_other": "AI",
+    "A_bybit.list": "HK",
     "A_YouTube": "Google"
   },
   "remote_before": [
