@@ -1,0 +1,8 @@
+# NAME: Bybit_DE
+# 建议策略: DE
+# 说明: 固定走德国的 Bybit 域名。必须排在 A_bybit.list（HK）之前；其余 Bybit 域名仍由它走 HK。
+DOMAIN-SUFFIX,bybit.nl
+DOMAIN-SUFFIX,bybit.eu
+DOMAIN-SUFFIX,bybit.biz
+DOMAIN-SUFFIX,bycsi.com
+DOMAIN-SUFFIX,byd3c3.com

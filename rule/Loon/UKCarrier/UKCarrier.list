@@ -1,0 +1,12 @@
+# NAME: UKCarrier
+# 建议策略: UK
+# 说明: giffgaff 与两个 Wi-Fi Calling 的 ePDG 域名。
+DOMAIN-SUFFIX,giffgaff.com
+DOMAIN-SUFFIX,epdg.epc.mnc033.mcc234.pub.3gppnetwork.org
+DOMAIN-SUFFIX,epdg.epc.mnc010.mcc234.pub.3gppnetwork.org
+
+# 下面三条 IP 段在旧配置里没有写出口策略，一直没有决定，所以先注释掉。
+# 想让它们走 UK，就去掉行首的 # 号。
+# IP-CIDR,31.94.0.0/16,no-resolve
+# IP-CIDR,87.194.0.0/16,no-resolve
+# IP-CIDR,148.252.160.0/19,no-resolve

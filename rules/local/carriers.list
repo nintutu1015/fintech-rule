@@ -1,7 +1,0 @@
-# 运营商规则；三条原始 IP 缺策略的情况已登记，不自动修复。
-DOMAIN-SUFFIX,epdg.epc.mnc033.mcc234.pub.3gppnetwork.org,UK
-IP-CIDR,31.94.0.0/16,no-resolve
-DOMAIN-SUFFIX,giffgaff.com,UK
-DOMAIN-SUFFIX,epdg.epc.mnc010.mcc234.pub.3gppnetwork.org,UK
-IP-CIDR,87.194.0.0/16,no-resolve
-IP-CIDR,148.252.160.0/19,no-resolve

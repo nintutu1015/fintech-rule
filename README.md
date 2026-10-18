@@ -1,91 +1,51 @@
-# 我的 Loon 分流工程
+# fintech-rule：我的 Loon 分流规则
 
-把分流当作一个可维护的项目：规则有出处，修改能比较，重要行为有检查，出问题能回退。
+做法参考 [blackmatrix7/ios_rule_script](https://github.com/blackmatrix7/ios_rule_script/tree/master/rule/Loon)：**一个服务一个 `.list` 文件，文件里只有规则，不写出口策略**；出口在 Loon 里订阅时用 `policy=` 指定。没有构建程序，改完推送，Loon 刷新订阅就生效。
 
-当前版本是 **v0.1 本地基础版**。它从已经确认的配置迁移而来，保留现有行为。仓库为公开的 [nintutu1015/fintech-rule](https://github.com/nintutu1015/fintech-rule)，GitHub CI（结构检查与回归测试）已通过，但尚未在 Loon 设备上验证。现用配置不会被工具自动覆盖。
-
-## 现在的分流结构
-
-```mermaid
-flowchart LR
-    request[网络请求] --> rules[本地 / 插件 / 远程规则]
-    rules --> app[AI / Paypal / 其他应用组]
-    rules --> default[兜底 Proxy]
-    app --> default
-    app --> auto[Auto / Fallback]
-    app --> region[US / DE / UK / KR / JP / TW / HK / SG]
-    app --> local[自建节点]
-    default --> nodes[全部自建与订阅节点]
-    region --> filtered[相应地区节点]
+```
+rule/Loon/<服务>/<服务>.list     规则文件
+loon/subscriptions.conf          可直接粘贴进 Loon 的订阅清单（含出口策略和顺序）
 ```
 
-- `Proxy` 展开全部节点，不嵌套自动选择和地区组。
-- 应用组显示 `Proxy / Auto / Fallback / 自建节点 / 八个地区组`；原有 DIRECT 选项保留。
-- PayPal 通过 `Paypal → US / DE / UK` 手动选择。它不根据登录账户自动区分国家。
-- 最终兜底是 `FINAL,Proxy`。
+## 怎么用
 
-## 改什么文件
+1. 打开 [`loon/subscriptions.conf`](loon/subscriptions.conf)，把 `[Remote Rule]` 下的行加到你 Loon 配置的 `[Remote Rule]`；`[Plugin]` 同理。也可以在 Loon 里逐条添加订阅规则。
+2. Loon 里要有清单里用到的策略组，名字必须一致：自己的规则用到 `AI`、`DE`、`HK`、`TW`、`UK`、`Proxy`，第三方规则还用到 `Twitter`、`Paypal`、`Google` 等。
+3. 以后改规则：编辑 `.list`，推送到 GitHub，Loon 刷新订阅即可。
 
-| 想修改什么 | 文件 |
-| --- | --- |
-| 每个 App / 网站的现状、新增流程、设备验证记录 | [`docs/services.md`](docs/services.md) |
-| 自己的站点与地区例外 | `rules/local/personal.list` |
-| Wi-Fi Calling 等运营商规则 | `rules/local/carriers.list` |
-| 明确的 AI 例外 | `rules/local/ai-overrides.list` |
-| 局域网、国内直连、基础网络 | `rules/local/network.list` |
-| 最终兜底 | `rules/local/final.list` |
-| 应用菜单、地区筛选、DNS 等公开配置 | `config/profile.template.lcf` |
-| 第三方规则与插件的 URL、策略、启用状态和顺序 | `config/upstreams.json` |
-| 规则片段的加载顺序、已知遗留问题 | `config/project.json` |
-| 不能改坏的分流预期（每条本地域名规则都必须登记） | `tests/expectations.json` |
-| 自建节点、订阅地址和证书 | `.local/private.json`，仅本地 |
+你 Loon 里原来写在本地 `[Rule]` 的同一批规则可以继续用；改用订阅后，删掉对应的本地行，避免重复。
 
-`rules/local/` 是构建片段，包含明确出口策略；当前在构建时写入本地 Rule 段。**不要直接把这些片段当成远程订阅添加**，否则可能改变来源优先级。第三方规则目前继续引用原作者地址，没有整库复制或宣称由本项目维护。
+## 规则列表
 
-## 本地使用
+| 文件 | 内容 | 建议策略 |
+| --- | --- | --- |
+| `Grok` | grok.com，要排在 Twitter 之前 | AI |
+| `Bybit_DE` | 固定走德国的 Bybit 域名，要排在 `A_bybit.list`（HK）之前 | DE |
+| `Bitkeep` | bitkeep.com | HK |
+| `Bonify` | bonify.de | DE |
+| `Polymarket` | polymarket.com | TW |
+| `CathayPacific` | cathaypacific.com | Proxy |
+| `Mosavi` | mosavi.ai | Proxy |
+| `AntBankHK` | 香港银行 App 的日志域名 | HK |
+| `UKCarrier` | giffgaff 与两个 Wi-Fi Calling 域名 | UK |
 
-需要 Python 3.9+ 和 Git，无第三方 Python 依赖。
+## 新增一个 App 或网站
 
-```bash
-python3 tools/project.py check
-python3 -m unittest discover -s tests -v
-python3 tools/project.py build
-```
+1. 新建 `rule/Loon/<名字>/<名字>.list`，每行一条，如 `DOMAIN-SUFFIX,example.com`。可用 `DOMAIN`、`DOMAIN-SUFFIX`、`DOMAIN-KEYWORD`、`IP-CIDR`（IP 要加 `,no-resolve`）。**不要在文件里写策略。**
+2. 在 `loon/subscriptions.conf` 里自己的那一段加一行，写上 `policy=` 和 `tag=`。
+3. 如果有第三方规则可能抢先匹配这个域名，就把这一行放在它前面。
+4. 推送，在 Loon 里刷新订阅，用请求日志确认命中。
 
-输出 `dist/loon.lcf`，权限为 0600；通过本地方式传到 Loon 后再导入。它包含私人数据，不作为 GitHub Actions 产物上传。
+## 注意
 
-本机已把现有私密设置迁移到 `.local/private.json`，不需要再次填写。新电脑可从 `config/private.example.json` 复制为 `.local/private.json`，然后在本地补全；不要把私密信息填回示例文件。
+- **顺序**：订阅规则从上到下，先命中先生效。`Paypal` 要排在 `A_Global` 前面，否则 PayPal 组的选择不生效。
+- **优先级**：Loon 的来源优先级是本地规则 > 插件规则 > 订阅规则（[Loon 文档](https://nsloon.app/docs/Rule/)）。自己的规则改成订阅后，比原来写在本地 `[Rule]` 低了一档，如果插件里有同域名的规则，会先命中插件。某条没生效时，把它改回写进本地 `[Rule]`。
+- **PayPal**：一个策略组同一时间只能选一个出口，不能按登录账户区分国家，换账户前手动切换 `Paypal` 组。
+- **三条英国 IP 段**：旧配置里没有写出口，一直没决定，在 `UKCarrier.list` 里先注释掉了。
+- **WeatherKit 插件**：原地址在 2026-09-26 核对时返回 404，清单里仍保留。
+- **A_Global**：它排在 Google、Instagram 等服务组前面，这些服务目前走 Proxy。
+- **设备验证**：还没有在 Loon 实机上逐项确认。
 
-```bash
-# 仅迁移时使用：确认生成结果与冻结的旧版有效配置一致
-python3 tools/project.py verify-baseline
-```
+## 来源与许可
 
-`.local/baseline.lcf` 也是本地文件。开始有意修改规则后，不要求继续与旧版完全一致；此时用规则预期、Git diff 和 Loon 请求日志验证。
-
-## 一次规则变更怎么做
-
-1. 记录实际域名、想走的策略、目前命中的规则；不要提交完整账户请求或令牌。
-2. 修改对应片段或上游来源记录，补充规则预期。
-3. 运行检查和测试，查看 Git diff。
-4. 生成配置，在设备上用 Loon 请求日志验证。
-5. 确认后提交修改。需要回退时从已验证的 Git 提交恢复公开文件，再在本地重新构建。
-
-已有三个运营商 IP 规则缺少明确策略，属于用户选择保留的旧配置：检查会发出三条警告；新增缺策略规则会报错。WeatherKit 原 URL 在 2026-09-26 核对时返回 404，按此前选择仍启用。[已知问题与后续计划](docs/roadmap.md)
-
-## GitHub 的职责
-
-GitHub 只保存公开配置模板、规则来源、维护说明和检查程序。节点、订阅凭据、证书、冻结的完整配置及构建产物都在忽略目录中。CI 不需要这些私人内容，也不自动发布完整配置。
-
-第一版 CI 检查结构、组引用、循环、相同本地条件的策略冲突、已登记的分流预期及常见凭据误提交。它不下载第三方规则、不运行插件脚本，也不是 Loon 原生解析器。远程内容变化导致的覆盖冲突，需要后续加入快照审查和设备验证。
-
-准备发布时只使用本目录 `loon-rules/`，不要把上一级历史工作目录整体上传。[设计边界](docs/design.md)
-
-## 文档依据
-
-- [Loon 规则及优先级](https://nsloon.app/docs/Rule/)
-- [Loon 策略组](https://nsloon.app/docs/Policy/policygroup/)
-- [Loon 订阅规则](https://nsloon.app/docs/Rule/sub_rule/)
-- [GitHub 固定版本链接](https://docs.github.com/en/repositories/working-with-files/using-files/getting-permanent-links-to-files)
-
-没有为引用的第三方规则、插件或图标重新授权；其版权和许可归各自作者。首次对外发布前再确定本项目自有部分采用的许可证。
+第三方规则只引用原作者的地址，没有复制，版权归各自作者。本仓库自己的规则暂未设置许可证。

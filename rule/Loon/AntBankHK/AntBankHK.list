@@ -1,0 +1,4 @@
+# NAME: AntBankHK
+# 建议策略: HK
+# 说明: 香港银行 App 的日志域名。
+DOMAIN-SUFFIX,ant-hkbank-linkd.cn-hongkong.log.aliyuncs.com
